@@ -6,7 +6,7 @@ import {setAuthedUser} from '../actions/authedUser' // importing action creators
 const AUTHED_ID = 'tylermcginnis'  // saving or user on a constant
 
 
-// we are uing a Redux-Thunk pattern because with want to use a Async function
+// we are using a Redux-Thunk pattern because with want to use a Async function
 export function handleInitialData () {
     return (dispatch) => {  //redux-thunk pattern
         return getInitialData()
