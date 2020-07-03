@@ -5,6 +5,7 @@ import {TiArrowBackOutline} from 'react-icons/ti'
 import {TiHeartOutline} from 'react-icons/ti'
 import {TiHeartFullOutline} from 'react-icons/ti'
 import {handleToggleTweet} from '../actions/tweets'
+import {Link, withRouter} from 'react-router-dom'
 
 class Tweet extends Component {
 
@@ -16,7 +17,7 @@ class Tweet extends Component {
 
         dispatch(handleToggleTweet({
             id: tweet.id,
-            hasliked: tweet.hasliked,
+            hasLiked: tweet.hasLiked,
             authedUser
         }))
     }
@@ -24,6 +25,7 @@ class Tweet extends Component {
     toParent = (event, id) => {
         event.preventDefault()
         // todo: redirect to parent tweet
+        this.props.history.push(`/tweet/${id}`)
     }
 
     render() {
@@ -35,13 +37,13 @@ class Tweet extends Component {
 
         // destructuring all the properties we need from Tweets
         const {
-            name, avatar, timestamp, text, hasliked, likes, replies, id, parent
+            name, avatar, timestamp, text, hasLiked, likes, replies, id, parent
         } = tweet
 
         console.log(this.props)     // debbuging to see if I'm passing the data
 
         return (
-            <div className='tweet'>
+            <Link to={`/tweet/${id}`} className='tweet'>
                 <img
                     src={avatar}
                     alt={`Avatar of ${name}`}
@@ -61,15 +63,15 @@ class Tweet extends Component {
                     <div className='tweets-icons'>
                         <TiArrowBackOutline className='tweet-icon' />
                         <span>{ replies !== 0 && replies}</span>
-                        <button className='heart-button' onCLick={this.handleLike}>
-                            {hasliked === true
+                        <button className='heart-button' onClick={this.handleLike}>
+                            { hasLiked === true
                                 ? <TiHeartFullOutline color='#e0245e' className='tweet-icon' />
                                 : <TiHeartOutline className='tweet-icon' />}
                         </button> 
                         <span>{likes !==0 && likes}</span>
                     </div>
                 </div>
-            </div>
+            </Link>
         )
     }
 }
@@ -84,4 +86,4 @@ function mapStateToProps({authedUser, users, tweets}, {id}) {    // connecting t
     }
 }
 
-export default connect(mapStateToProps)(Tweet)
+export default withRouter(connect(mapStateToProps)(Tweet))

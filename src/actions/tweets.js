@@ -1,4 +1,6 @@
 import {saveLikeToggle} from '../utils/api'
+import {saveTweet} from '../utils/api'
+import {showLoading, hideLoading} from 'react-redux-loading'
 
 // action type
 export const RECEIVE_TWEETS = 'RECEIVE_TWEETS'
@@ -33,5 +35,33 @@ export function handleToggleTweet (info) {
                 dispatch(toggleTweet(info))
                 alert('The was an error liking the tweet. Try again')
             })
+    }
+}
+
+// action type
+export const ADD_TWEET = 'ADD_TWEET'
+
+// action creator
+function addTweet (tweet) {
+    return {
+        type: ADD_TWEET,
+        tweet,
+    }
+}
+
+// thunk action creator
+export function handleAddTweet (text, replyingTo) {
+    return (dispatch, getState) => {
+        const {authedUser} = getState()
+
+        dispatch(showLoading())
+
+        return saveTweet ({
+            text,
+            author: authedUser,
+            replyingTo
+        })
+            .then((tweet) => dispatch(addTweet(tweet)))
+            .then(() => dispatch(hideLoading()))
     }
 }
